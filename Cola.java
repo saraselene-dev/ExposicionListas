@@ -41,6 +41,45 @@ public class Cola {
         return atendida;
     }
 
+        public Mascota cancelar(int turno) {
+        if (estaVacia()) {
+            return null;
+        }
+        
+        if (Frente.getPaciente().getTurno() == turno) {
+            return desencolar();
+        }
+        
+        Nodo anterior = Frente;
+        Nodo actual = Frente.getSiguiente();
+        
+        while (actual != null && actual.getPaciente().getTurno() != turno) {
+            anterior = actual;
+            actual = actual.getSiguiente();
+        }
+        if (actual == null) {
+            return null;
+        }
+        anterior.setSiguiente(actual.getSiguiente());
+        if (actual == Fin) {
+            Fin = anterior;
+        }
+        return actual.getPaciente();
+    }
+
+        public boolean regresarAlFrente(Mascota paciente) {
+        if (paciente == null) {
+            return false;
+        }
+        Nodo nuevo = new Nodo(paciente);
+        nuevo.setSiguiente(Frente);
+        Frente = nuevo;
+        if (Fin == null) {
+            Fin = nuevo;
+        }
+        return true;
+    }
+
     public String mostrar() {
         String texto = "";
         Nodo actual = Frente;

@@ -52,19 +52,17 @@ public class Metodos {
 
     // RECEPCIÓN
 
-    public boolean registrarLlegada() {
-        String nombre = leerTexto("Nombre de la mascota: ");
-        String especie = leerTexto("Especie: ");
-        String dueno = leerTexto("Nombre del dueño: ");
-        int edad = leerEntero("Edad (años): ");
-        double peso = leerDecimal("Peso (kg): ");
-        Mascota nueva = new Mascota(dueno, nombre, especie, edad, peso, ContadorTurno);
-        if (Sala.encolar(nueva)) {
-            ContadorTurno++;
-            return true;
-        }
-        return false;
-    }
+    public Mascota registrarLlegada() {
+    String nombre = leerTexto("Nombre de la mascota: ");
+    String especie = leerTexto("Especie: ");
+    String dueno = leerTexto("Nombre del dueño: ");
+    int edad = leerEntero("Edad (años): ");
+    double peso = leerDecimal("Peso (kg): ");
+    Mascota nueva = new Mascota(dueno, nombre, especie, edad, peso, ContadorTurno);
+    Sala.encolar(nueva);
+    ContadorTurno++;
+    return nueva;
+}
 
     public Mascota atenderSiguiente() {
         Mascota atendida = Sala.desencolar();
@@ -75,6 +73,23 @@ public class Metodos {
         return atendida;
     }
 
+    public Mascota cancelarTurno() {
+        if (Sala.estaVacia()) {
+            return null;
+        }
+        int turno = leerEntero("Número de turno a cancelar: ");
+        return Sala.cancelar(turno);
+    }
+
+        public Mascota corregirAtencion() {
+        Mascota corregida = Historial.desapilar();
+        if (corregida == null) {
+            return null;
+        }
+        Sala.regresarAlFrente(corregida);
+        return corregida;
+    }
+    
     // CONSULTAS
 
     public String verSala() {
